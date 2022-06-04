@@ -12,7 +12,7 @@ Returns a passphrase in the file `passphrase.txt`
 ```bash
 davinci new-keypair --size 2048 --passphrase ./passphrase.key --folder ./path-to-folder
 ```
-Returns the public key in the file `public.key` and the private key in the file `private.key`.
+Returns the public key in the file `publicKey.pem` and the private key in the file `privateKey.pem`.
 
 - Generate Symmetric key (stored in a file)
 ```bash
