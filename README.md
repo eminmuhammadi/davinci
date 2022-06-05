@@ -1,6 +1,10 @@
 # DaVinci
 Fastest and secure way to encrypt and decrypt large files.
 
+## Installation
+You can download binary files for each platform from [the latest releases](https://github.com/eminmuhammadi/davinci/releases).
+
+
 ## Usage
 - Generate passphrase (stored in a file)
 ```bash
@@ -32,12 +36,11 @@ davinci encrypt --input ./file-decrypted.ext --output ./file.ext --passphrase ./
 ```
 Decrypts the file `file-decrypted.ext` using the key `key.txt` (encrypted using RSA) and stores the result in `file.ext`.
 
-## Installation
+## Building (obfuscated version)
 ```bash
 go mod download
 ```
 
-## Building
 ```bash
 bash build.sh
 
