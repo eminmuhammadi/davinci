@@ -32,7 +32,7 @@ Encrypts the file `file.ext` using the key `key.txt` (encrypted using RSA) and s
 
 - Decrypt a file
 ```bash
-davinci encrypt --input ./file-decrypted.ext --output ./file.ext --passphrase ./passphrase.key --private-key ./privateKey.pem
+davinci decrypt --input ./file-decrypted.ext --output ./file.ext --passphrase ./passphrase.key --private-key ./privateKey.pem
 ```
 Decrypts the file `file-decrypted.ext` using the key `key.txt` (encrypted using RSA) and stores the result in `file.ext`.
 
@@ -44,7 +44,7 @@ go mod download
 ```bash
 bash build.sh
 
-// or
+# or
 
 chmod +x build.sh
 ./build.sh
