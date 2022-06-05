@@ -27,10 +27,13 @@ func NewPassphrase() *cli.Command {
 func newPassphraseAction(ctx *cli.Context) error {
 	folder := ctx.String("folder")
 
+	// Generate a random passphrase
 	passphrase := generator.RandomBytesBase64(32)
+
 	fs.WriteFile(
 		fs.JoinPaths(folder, "passphrase.txt"),
 		[]byte(passphrase),
 	)
+
 	return nil
 }

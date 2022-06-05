@@ -27,6 +27,7 @@ func NewKey() *cli.Command {
 func newKeyAction(ctx *cli.Context) error {
 	folder := ctx.String("folder")
 
+	// Generate new key (size 32 bytes)
 	key := generator.RandomBytesBase64(32)
 
 	fs.WriteFile(

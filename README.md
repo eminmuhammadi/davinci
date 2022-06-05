@@ -18,7 +18,7 @@ Returns the public key in the file `publicKey.pem` and the private key in the fi
 ```bash
 davinci key --folder ./path-to-folder
 ```
-Return the encrypted key using RSA in the file `key.txt`.
+Return the symmetric key in the file `key.txt`.
 
 - Encrypt a file
 ```bash
