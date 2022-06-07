@@ -1,71 +1,39 @@
-name: "DaVinci Development Pipeline"
-
-on:
-  push:
-    branches: ["master"]
-  pull_request:
-    branches: ["master"]
-
+on: [push, pull_request]
+name: Test
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.16
-
-      - name: Verify dependencies
-        run: go mod verify
-
-      - name: Install
-        run: go install
-
-      - name: Build
-        run: go build -v ./...
-
-      - name: Run go vet
-        run: go vet ./...
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.16
-
-      - name: Verify dependencies
-        run: go mod verify
-
-      - name: Install
-        run: go install
-
-      - name: Install golint
-        run: go install golang.org/x/lint/golint@latest
-
-      - name: Run golint
-        run: golint ./...
-
   test:
-      runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [1.17.x, 1.18.x]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
-      
-      - name: Set up Go
-        uses: actions/setup-go@v2
+      - uses: actions/setup-go@v3
         with:
-          go-version: 1.16
+          go-version: ${{ matrix.go-version }}
+      - uses: actions/checkout@v3
+      - run: go test ./...
 
-      - name: Verify dependencies
-        run: go mod verify
-
-      - name: Install
-        run: go install
-
-      - name: Run tests
-        run: go test -race -vet=off ./...
+  test-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.18.x
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v2
+        with:
+          # In order:
+          # * Module download cache
+          # * Build cache (Linux)
+          # * Build cache (Mac)
+          # * Build cache (Windows)
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+            ~/Library/Caches/go-build
+            ~\AppData\Local\go-build
+          key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-${{ matrix.go-version }}-
+      - run: go test ./...
