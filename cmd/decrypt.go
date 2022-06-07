@@ -42,30 +42,31 @@ func Decrypt() *cli.Command {
 				Required:    true,
 			},
 		},
-		Action: decryptAction,
+		Action: func(ctx *cli.Context) error {
+			privK := fs.ReadFile(ctx.String("private-key"))
+			passphrase := fs.ReadFile(ctx.String("passphrase"))
+			input := fs.ReadFile(ctx.String("input"))
+			output := ctx.String("output")
+
+			plaintext := DecryptAction(privK, passphrase, input)
+
+			err := fs.WriteFile(output, []byte(plaintext))
+
+			return err
+		},
 	}
 }
 
-func decryptAction(ctx *cli.Context) error {
-	privateKey := fs.ReadFile(ctx.String("private-key"))
-	passphrase := fs.ReadFile(ctx.String("passphrase"))
-	input := fs.ReadFile(ctx.String("input"))
-	output := ctx.String("output")
-
+func DecryptAction(privK []byte, passphrase []byte, input []byte) string {
 	// Split the input to get the encrypted key and the encrypted data
 	splittedInput := bytes.Split(input, []byte("\n"))
 	encKey, ciphertext := splittedInput[0], splittedInput[1]
 
 	// Decrypt the key
-	key := rsa.Decrypt(string(privateKey), string(encKey), string(passphrase))
+	key := rsa.Decrypt(string(privK), string(encKey), string(passphrase))
 
 	// Decrypt the data
 	plaintext := aes.DecryptGCM256(string(ciphertext), string(key))
 
-	fs.WriteFile(
-		output,
-		[]byte(plaintext),
-	)
-
-	return nil
+	return plaintext
 }

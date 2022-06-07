@@ -47,32 +47,33 @@ func Encrypt() *cli.Command {
 				Required:    true,
 			},
 		},
-		Action: encryptAction,
+		Action: func(ctx *cli.Context) error {
+			pubK := fs.ReadFile(ctx.String("public-key"))
+			passphrase := fs.ReadFile(ctx.String("passphrase"))
+			key := fs.ReadFile(ctx.String("key"))
+			input := fs.ReadFile(ctx.String("input"))
+			output := fs.JoinPaths(ctx.String("output"))
+
+			ciphertext := EncryptAction(pubK, passphrase, key, input)
+
+			err := fs.WriteFile(output, []byte(ciphertext))
+
+			return err
+		},
 	}
 }
 
-func encryptAction(ctx *cli.Context) error {
-	pubK := fs.ReadFile(ctx.String("public-key"))
-	passphrase := fs.ReadFile(ctx.String("passphrase"))
-	key := fs.ReadFile(ctx.String("key"))
-	input := fs.ReadFile(ctx.String("input"))
-	output := fs.JoinPaths(ctx.String("output"))
-
+func EncryptAction(pubK []byte, passphrase []byte, key []byte, input []byte) string {
 	// Encrypt the key
 	encKey := rsa.Encrypt(string(pubK), string(key), string(passphrase))
 
 	// Encrypt the data
 	ciphertext := aes.EncryptGCM256(string(input), string(key))
 
-	// Write the encrypted key and the encrypted data to the output file
-	error := fs.WriteFile(
-		output,
-		[]byte(encKey+"\n"+ciphertext),
-	)
-
-	if error != nil {
-		return error
-	}
-
-	return nil
+	// Structure
+	// -------------
+	// Encrypted Key
+	//
+	// Encrypted Data
+	return encKey + "\n" + ciphertext
 }

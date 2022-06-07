@@ -20,20 +20,20 @@ func NewKey() *cli.Command {
 				Required:    true,
 			},
 		},
-		Action: newKeyAction,
+		Action: func(ctx *cli.Context) error {
+			folder := ctx.String("folder")
+			key := KeyAction()
+
+			err := fs.WriteFile(fs.JoinPaths(folder, "key.txt"), []byte(key))
+
+			return err
+		},
 	}
 }
 
-func newKeyAction(ctx *cli.Context) error {
-	folder := ctx.String("folder")
-
+func KeyAction() string {
 	// Generate new key (size 32 bytes)
 	key := generator.RandomBytesBase64(32)
 
-	fs.WriteFile(
-		fs.JoinPaths(folder, "key.txt"),
-		[]byte(key),
-	)
-
-	return nil
+	return key
 }

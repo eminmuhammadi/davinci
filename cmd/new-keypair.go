@@ -36,31 +36,41 @@ func NewKeyPair() *cli.Command {
 				Required:    true,
 			},
 		},
-		Action: newKeysAction,
+		Action: func(ctx *cli.Context) error {
+			folder := ctx.String("file")
+			passphrase := fs.ReadFile(ctx.String("passphrase"))
+			keySize := ctx.String("size")
+
+			size, err := strconv.Atoi(keySize)
+			if err != nil {
+				return err
+			}
+
+			keys := KeyPairAction(passphrase, size)
+
+			// Public Key
+			if err := fs.WriteFile(
+				fs.JoinPaths(folder, "publicKey.pem"),
+				[]byte(keys.PublicKey),
+			); err != nil {
+				return err
+			}
+
+			// Private Key
+			if err := fs.WriteFile(
+				fs.JoinPaths(folder, "privateKey.pem"),
+				[]byte(keys.PrivateKey),
+			); err != nil {
+				return err
+			}
+
+			return nil
+		},
 	}
 }
 
-func newKeysAction(ctx *cli.Context) error {
-	folder := ctx.String("file")
-	passphrase := fs.ReadFile(ctx.String("passphrase"))
-
-	keySize := ctx.String("size")
-
-	size, err := strconv.Atoi(keySize)
-	if err != nil {
-		return err
-	}
-
+func KeyPairAction(passphrase []byte, size int) rsa.KeyPair {
 	keys := rsa.GenerateKeyPair(size, string(passphrase))
 
-	fs.WriteFile(
-		fs.JoinPaths(folder, "publicKey.pem"),
-		[]byte(keys.PublicKey),
-	)
-	fs.WriteFile(
-		fs.JoinPaths(folder, "privateKey.pem"),
-		[]byte(keys.PrivateKey),
-	)
-
-	return nil
+	return keys
 }

@@ -26,7 +26,7 @@ func ReadFile(filePath string) []byte {
 func WriteFile(filePath string, data []byte) error {
 	err := ioutil.WriteFile(filePath, data, 0644)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	return nil

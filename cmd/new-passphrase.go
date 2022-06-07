@@ -20,20 +20,25 @@ func NewPassphrase() *cli.Command {
 				Required:    true,
 			},
 		},
-		Action: newPassphraseAction,
+		Action: func(ctx *cli.Context) error {
+			folder := ctx.String("folder")
+
+			// Generate a random passphrase
+			passphrase := PassphraseAction()
+
+			err := fs.WriteFile(
+				fs.JoinPaths(folder, "passphrase.txt"),
+				[]byte(passphrase),
+			)
+
+			return err
+		},
 	}
 }
 
-func newPassphraseAction(ctx *cli.Context) error {
-	folder := ctx.String("folder")
-
+func PassphraseAction() string {
 	// Generate a random passphrase
 	passphrase := generator.RandomBytesBase64(32)
 
-	fs.WriteFile(
-		fs.JoinPaths(folder, "passphrase.txt"),
-		[]byte(passphrase),
-	)
-
-	return nil
+	return passphrase
 }
