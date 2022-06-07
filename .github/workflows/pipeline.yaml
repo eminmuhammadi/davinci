@@ -29,11 +29,25 @@ jobs:
       - name: Run go vet
         run: go vet ./...
 
-      - name: Install golint
-        run: go install golang.org/x/lint/golint@latest
+  lint:
+    - name: Verify dependencies
+      run: go mod verify
 
-      - name: Run golint
-        run: golint ./...
+    - name: Install
+      run: go install
 
-      - name: Run tests
-        run: go test -race -vet=off ./...
+    - name: Install golint
+      run: go install golang.org/x/lint/golint@latest
+
+    - name: Run golint
+      run: golint ./...
+
+  test:
+    - name: Verify dependencies
+      run: go mod verify
+
+    - name: Install
+      run: go install
+
+    - name: Run tests
+      run: go test -race -vet=off ./...
