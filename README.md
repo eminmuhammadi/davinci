@@ -38,7 +38,7 @@ Decrypts the file `file-decrypted.ext` using the key `key.txt` (encrypted using 
 
 ## Building (obfuscated version)
 ```bash
-go mod download
+go install
 ```
 
 ```bash
