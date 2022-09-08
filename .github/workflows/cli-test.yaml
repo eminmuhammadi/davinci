@@ -21,9 +21,13 @@ jobs:
            go run main.go key --folder ./
            go run main.go encrypt --input ./before.txt --output ./secret.txt --key ./key.txt --passphrase ./passphrase.txt --public-key ./publicKey.pem
            go run main.go decrypt --input ./secret.txt --output ./after.txt --passphrase ./passphrase.txt --private-key ./privateKey.pem
-           export BEFORE_CONTENT=$(cat ./before.txt)
-           export AFTER_CONTENT=$(cat ./after.txt)
-           cmp --silent $BEFORE_CONTENT $AFTER_CONTENT || echo "files are different"
+    - name: Get the file contents
+        uses: actions/upload-artifact@v3
+        with:
+          name: after.txt and before.txt
+          path: |
+            ./after.txt
+            ./before.txt
 
 
            
