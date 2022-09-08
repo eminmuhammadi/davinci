@@ -1,3 +1,5 @@
+[![Unit tests](https://github.com/eminmuhammadi/davinci/actions/workflows/pipeline.yaml/badge.svg?branch=master)](https://github.com/eminmuhammadi/davinci/actions/workflows/pipeline.yaml) [![Davinci CLI Test](https://github.com/eminmuhammadi/davinci/actions/workflows/cli-test.yaml/badge.svg?branch=master)](https://github.com/eminmuhammadi/davinci/actions/workflows/cli-test.yaml) [![CodeQL](https://github.com/eminmuhammadi/davinci/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/eminmuhammadi/davinci/actions/workflows/codeql-analysis.yml)
+
 # DaVinci
 Fastest and secure way to encrypt and decrypt large files.
 
