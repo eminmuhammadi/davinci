@@ -13,13 +13,12 @@ jobs:
     - uses: actions/checkout@v3
       with:
         go-version: ${{ matrix.go-version }}
-    - run: |
-           go install
-           echo "Hello World" > ./before.txt
-           go run main.go new-passphrase --folder ./
-           go run main.go new-keypair --size 2048 --passphrase ./passphrase.txt --folder ./
-           go run main.go key --folder ./
-           go run main.go encrypt --input ./before.txt --output ./secret.txt --key ./key.txt --passphrase ./passphrase.txt --public-key ./publicKey.pem
+    - run: go install && \
+           echo "Hello World" > ./before.txt && \
+           go run main.go new-passphrase --folder ./ && \
+           go run main.go new-keypair --size 2048 --passphrase ./passphrase.txt --folder ./ && \
+           go run main.go key --folder ./ && \
+           go run main.go encrypt --input ./before.txt --output ./secret.txt --key ./key.txt --passphrase ./passphrase.txt --public-key ./publicKey.pem && \
            go run main.go decrypt --input ./secret.txt --output ./after.txt --passphrase ./passphrase.txt --private-key ./privateKey.pem
 
            
