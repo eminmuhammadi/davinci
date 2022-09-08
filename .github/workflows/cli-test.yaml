@@ -1,0 +1,26 @@
+# Davinci CLI Test
+on: [push, pull_request]
+name: Davinci CLI Test
+jobs:
+  test:
+    strategy:
+      matrix:
+        go-version: [1.18.x, 1.19.x]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/setup-go@v3
+      with:
+        go-version: ${{ matrix.go-version }}
+    - uses: actions/checkout@v3
+    - run: echo "Hello World" > ./before.txt && \
+           go run main.go new-passphrase --folder ./ && \
+           go run main.go new-keypair --size 2048 --passphrase ./passphrase.key --folder ./ && \
+           go run main.go key --folder ./ && \
+           go run main.go encrypt --input ./before.txt --output ./secret.txt --key ./key.txt --passphrase ./passphrase.key --public-key ./publicKey.pem && \
+           go run main.go decrypt --input ./secret.txt --output ./after.txt --passphrase ./passphrase.key --private-key ./privateKey.pem && \
+           cat ./after.txt && \
+           cat ./before.txt
+
+
+           
