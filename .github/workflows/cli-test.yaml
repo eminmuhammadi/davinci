@@ -17,10 +17,10 @@ jobs:
            go install
            echo "Hello World" > ./before.txt
            go run main.go new-passphrase --folder ./
-           go run main.go new-keypair --size 2048 --passphrase ./passphrase.key --folder ./
+           go run main.go new-keypair --size 2048 --passphrase ./passphrase.txt --folder ./
            go run main.go key --folder ./
-           go run main.go encrypt --input ./before.txt --output ./secret.txt --key ./key.txt --passphrase ./passphrase.key --public-key ./publicKey.pem
-           go run main.go decrypt --input ./secret.txt --output ./after.txt --passphrase ./passphrase.key --private-key ./privateKey.pem
+           go run main.go encrypt --input ./before.txt --output ./secret.txt --key ./key.txt --passphrase ./passphrase.txt --public-key ./publicKey.pem
+           go run main.go decrypt --input ./secret.txt --output ./after.txt --passphrase ./passphrase.txt --private-key ./privateKey.pem
            export BEFORE_CONTENT=$(cat ./before.txt)
            export AFTER_CONTENT=$(cat ./after.txt)
            cmp --silent $BEFORE_CONTENT $AFTER_CONTENT || echo "files are different"
