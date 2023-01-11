@@ -59,7 +59,7 @@ Key Generation:
 
 Encryption:
 - Encrypt symmetric key using the public key. `Enc(R, pubK)`, afterwards we call this `R_enc`.
-- Encrypt file using the encrypted symmetric key. `Enc(file, R_enc)`, afterwards we call this `file_enc`.
+- Encrypt file using the symmetric key. `Enc(file, R)`, afterwards we call this `file_enc`. The generated file will be in this format: `R_enc + \n + file_enc`
 
 Decryption:
 - Decrypt symmetric key using the private key. `Dec(R_enc, privK)=R`
