@@ -16,7 +16,7 @@ Returns a passphrase in the file `passphrase.txt`
 
 - Generate public and private key (stored in a file)
 ```bash
-davinci new-keypair --size 2048 --passphrase ./passphrase.key --folder ./path-to-folder
+davinci new-keypair --size 2048 --passphrase ./passphrase.txt --folder ./path-to-folder
 ```
 Returns the public key in the file `publicKey.pem` and the private key in the file `privateKey.pem`.
 
@@ -28,13 +28,13 @@ Return the symmetric key in the file `key.txt`.
 
 - Encrypt a file
 ```bash
-davinci encrypt --input ./file.ext --output ./file-decrypted.ext --key ./key.txt --passphrase ./passphrase.key --public-key ./publicKey.pem
+davinci encrypt --input ./file.ext --output ./file-decrypted.ext --key ./key.txt --passphrase ./passphrase.txt --public-key ./publicKey.pem
 ```
 Encrypts the file `file.ext` using the key `key.txt` (encrypted using RSA) and stores the result in `file-decrypted.ext`.
 
 - Decrypt a file
 ```bash
-davinci decrypt --input ./file-decrypted.ext --output ./file.ext --passphrase ./passphrase.key --private-key ./privateKey.pem
+davinci decrypt --input ./file-decrypted.ext --output ./file.ext --passphrase ./passphrase.txt --private-key ./privateKey.pem
 ```
 Decrypts the file `file-decrypted.ext` using the key `key.txt` (encrypted using RSA) and stores the result in `file.ext`.
 
